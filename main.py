@@ -2,6 +2,8 @@ from datetime import datetime
 from dotenv import load_dotenv
 import os
 import requests
+import time
+import json
 
 # Load environment variables from the .env file (if present)
 load_dotenv()
@@ -75,8 +77,18 @@ def process_selection(selection_id, date, quantity):
     }
     post_endpoint = f"{GRAPH_ENDPOINT}/graph{selection_id}"
     print(post_endpoint)
-    response = requests.post(url=post_endpoint, json=post_config, headers=headers)
-    print(response.text)
+    call_api = True
+    while call_api:
+        response = requests.post(url=post_endpoint, json=post_config, headers=headers)
+        print(response.text)
+        success_text = response.text
+        success_dict = json.loads(success_text)
+        print(success_dict['isSuccess'])
+        if success_dict['isSuccess'] == False:
+            print("API call was not successful. Wating for 5 seconds before tying again.")
+            time.sleep(5)
+        else:
+            call_api = False
 
 # Main function to run the menu and get additional inputs
 def main():
