@@ -101,5 +101,10 @@ def main():
     process_selection(option, date, quantity)
 
 # Run the main function
-if __name__ == "__main__":
-    main()
+run_program = True
+while run_program == True:
+    user_input = input("Do you want to enter some data? (Y or N):")
+    if user_input == 'Y' or user_input == 'y':
+        main()
+    else:
+        run_program = False
